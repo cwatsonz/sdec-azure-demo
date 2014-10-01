@@ -1,8 +1,13 @@
 package com.protegra.sdecdemo.fragments;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +38,20 @@ public class SpeakerFragment extends Fragment implements AbsListView.OnItemClick
      * Views.
      */
     private SpeakerAdapter mAdapter;
+
+    private BroadcastReceiver mLoadingReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mAdapter.notifyDataSetChanged();
+        }
+    };
+
+    private BroadcastReceiver mLoadedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mAdapter.notifyDataSetChanged();
+        }
+    };
 
     public static SpeakerFragment newInstance() {
         return new SpeakerFragment();
@@ -81,6 +100,22 @@ public class SpeakerFragment extends Fragment implements AbsListView.OnItemClick
         mListener = null;
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mLoadingReceiver, new IntentFilter("data-loading"));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mLoadedReceiver, new IntentFilter("data-loaded"));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLoadingReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLoadedReceiver);
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

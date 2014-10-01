@@ -1,9 +1,16 @@
 package com.protegra.sdecdemo.activities;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.protegra.sdecdemo.helpers.AzureServiceHelper;
@@ -15,6 +22,23 @@ import com.protegra.sdecdemo.data.Speakers;
 
 public class MainActivity extends Activity implements SpeakerFragment.OnSpeakerSelectedListener {
 
+    private ProgressBar mProgressBar;
+
+    private BroadcastReceiver mLoadingReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.bringToFront();
+        }
+    };
+
+    private BroadcastReceiver mLoadedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mProgressBar.setVisibility(View.GONE);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,8 +49,27 @@ public class MainActivity extends Activity implements SpeakerFragment.OnSpeakerS
                     .commit();
         }
 
+        mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
+        mProgressBar.setVisibility(View.GONE);
+
         AzureServiceHelper helper = new AzureServiceHelper(this);
-        helper.getSpeakers();
+        helper.loadData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLoadingReceiver, new IntentFilter("data-loading"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLoadedReceiver, new IntentFilter("data-loaded"));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoadingReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoadedReceiver);
     }
 
 
@@ -45,7 +88,7 @@ public class MainActivity extends Activity implements SpeakerFragment.OnSpeakerS
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             AzureServiceHelper helper = new AzureServiceHelper(this);
-            helper.getSpeakers();
+            helper.refreshData();
             return true;
         }
         return super.onOptionsItemSelected(item);
