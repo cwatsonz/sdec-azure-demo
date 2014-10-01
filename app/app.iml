@@ -81,6 +81,7 @@
     <orderEntry type="jdk" jdkName="Android API 20 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="mobileservices-1.1.5-javadoc" level="project" />
+    <orderEntry type="library" exported="" name="glide-3.3.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.2.2" level="project" />
     <orderEntry type="library" exported="" name="mobileservices-1.1.5-sources" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-20.0.0" level="project" />

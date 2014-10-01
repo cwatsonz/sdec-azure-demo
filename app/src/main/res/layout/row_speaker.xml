@@ -4,10 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/photo_small"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="4dp"
+        android:gravity="center_vertical"
+        tools:src="@drawable/ic_launcher" />
+
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:layout_alignBottom="@id/photo_small"
+        android:layout_alignTop="@id/photo_small"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toEndOf="@id/photo_small"
+        android:layout_toRightOf="@id/photo_small"
+        android:gravity="center_vertical"
+        android:singleLine="true"
         tools:text="Name" />
+
 </RelativeLayout>

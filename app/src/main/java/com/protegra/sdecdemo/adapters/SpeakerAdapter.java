@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import com.protegra.sdecdemo.R;
 import com.protegra.sdecdemo.data.Speaker;
@@ -33,14 +36,20 @@ public class SpeakerAdapter extends ArrayAdapter<Speaker> {
 
             viewHolder = new SpeakerViewHolder();
             viewHolder.name = (TextView) row.findViewById(R.id.name);
+            viewHolder.photo_small = (ImageView) row.findViewById(R.id.photo_small);
 
             row.setTag(viewHolder);
         } else {
-            viewHolder = (SpeakerViewHolder)row.getTag();
+            viewHolder = (SpeakerViewHolder) row.getTag();
         }
 
         if (currentItem != null) {
             viewHolder.name.setText(currentItem.name);
+
+            Glide.with(mContext)
+                    .load(mContext.getString(R.string.base_image_url) + currentItem.photo_small)
+                    .placeholder(R.drawable.ic_launcher)
+                    .into(viewHolder.photo_small);
         }
 
         return row;
@@ -48,5 +57,6 @@ public class SpeakerAdapter extends ArrayAdapter<Speaker> {
 
     static class SpeakerViewHolder {
         TextView name;
+        ImageView photo_small;
     }
 }

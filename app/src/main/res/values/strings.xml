@@ -7,4 +7,6 @@
     <string name="appURL">https://sdec-demo.azure-mobile.net/</string>
     <string name="appKey">LZXsvLGVfDqhVSmZVwvietQZhGDwhY56</string>
 
+    <string name="base_image_url">https://sdec.blob.core.windows.net/images/</string>
+
 </resources>
