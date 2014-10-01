@@ -61,7 +61,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public synchronized SQLiteDatabase openDatabase() {
-        if(mOpenCounter.incrementAndGet() == 1) {
+        if (mOpenCounter.incrementAndGet() == 1) {
             // Opening new database
             mDatabase = sInstance.getWritableDatabase();
         }
@@ -69,7 +69,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     public synchronized void closeDatabase() {
-        if(mOpenCounter.decrementAndGet() == 0) {
+        if (mOpenCounter.decrementAndGet() == 0) {
             // Closing database
             mDatabase.close();
         }
@@ -171,7 +171,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         Speaker speaker = new Speaker();
 
         try {
-            Cursor cursor = db.query(TABLE_SPEAKERS, new String[] {
+            Cursor cursor = db.query(TABLE_SPEAKERS, new String[]{
                             SPEAKERS_KEY_ID,
                             SPEAKERS_KEY_NAME,
                             SPEAKERS_KEY_PHOTO_SMALL,
@@ -182,7 +182,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                             SPEAKERS_KEY_WEBSITE,
                             SPEAKERS_KEY_DESCRIPTION
                     }, SPEAKERS_KEY_ID + "=?",
-                    new String[] { id }, null, null, null, null);
+                    new String[]{id}, null, null, null, null);
 
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -259,7 +259,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             values.put(SPEAKERS_KEY_DESCRIPTION, speaker.description);
 
             result = db.update(TABLE_SPEAKERS, values, SPEAKERS_KEY_ID + " = ?",
-                    new String[] { String.valueOf(speaker.id) });
+                    new String[]{String.valueOf(speaker.id)});
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -274,7 +274,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         try {
             db.delete(TABLE_SPEAKERS, SPEAKERS_KEY_ID + " = ?",
-                    new String[] { String.valueOf(speaker.id) });
+                    new String[]{String.valueOf(speaker.id)});
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

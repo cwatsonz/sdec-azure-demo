@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements SpeakerFragment.OnSpeakerS
                     .commit();
         }
 
-        mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.GONE);
 
         AzureServiceHelper helper = new AzureServiceHelper(this);
