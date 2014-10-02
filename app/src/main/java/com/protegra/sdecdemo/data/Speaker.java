@@ -10,6 +10,8 @@ public class Speaker {
     public String twitter;
     public String website;
     public String description;
+    public String __version;
+    public Boolean __deleted;
 
     public Speaker() {
 

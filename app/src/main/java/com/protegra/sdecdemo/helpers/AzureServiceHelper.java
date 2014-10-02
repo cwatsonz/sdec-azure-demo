@@ -25,8 +25,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 
 public class AzureServiceHelper {
-    private final String DATABASE_NAME = "sdec_demo";
-    private final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "sdec_demo";
+    private static final int DATABASE_VERSION = 1;
 
     private final Context mContext;
     private MobileServiceClient mClient;
@@ -56,11 +56,10 @@ public class AzureServiceHelper {
     }
 
     public void loadData() {
-        latch = new CountDownLatch(1);
-
         Intent intent = new Intent("data-loading");
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
+        latch = new CountDownLatch(1);
         mSpeakerHelper.pull();
 
         waitForLoadComplete();
@@ -94,11 +93,12 @@ public class AzureServiceHelper {
     }
 
     class SpeakerHelper {
+        private static final String TABLE_NAME = "speakers";
         protected MobileServiceSyncTable<Speaker> mTable;
         protected Query mQuery;
 
         SpeakerHelper() {
-            mTable = mClient.getSyncTable("speakers", Speaker.class);
+            mTable = mClient.getSyncTable(TABLE_NAME, Speaker.class);
             mQuery = mClient.getTable(Speaker.class).orderBy("name", QueryOrder.Ascending);
         }
 
@@ -114,13 +114,14 @@ public class AzureServiceHelper {
             tableDefinition.put("twitter", ColumnDataType.String);
             tableDefinition.put("website", ColumnDataType.String);
             tableDefinition.put("description", ColumnDataType.String);
-            tableDefinition.put("__deleted", ColumnDataType.String);
+            tableDefinition.put("__version", ColumnDataType.String);
+            tableDefinition.put("__deleted", ColumnDataType.Boolean);
 
-            localStore.defineTable("speakers", tableDefinition);
+            localStore.defineTable(TABLE_NAME, tableDefinition);
         }
 
         public void pull() {
-            if (Speakers.ITEMS.size() > 0) {
+            if (Speakers.ITEMS.size() > 0) { // When incremental sync is implemented in the SDK, this can probably be removed.
                 return;
             }
 
