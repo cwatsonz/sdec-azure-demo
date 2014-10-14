@@ -26,7 +26,7 @@ public class AzureServiceHelper {
 
         try {
             mClient = new MobileServiceClient(mContext.getString(R.string.appURL), mContext.getString(R.string.appKey), mContext);
-            SQLiteHelper.getInstance(mContext);
+            mDbHelper = SQLiteHelper.getInstance(mContext);
             mSpeakerTable = mClient.getTable(TABLE_NAME, Speaker.class);
         } catch (Exception e) {
             e.printStackTrace();
