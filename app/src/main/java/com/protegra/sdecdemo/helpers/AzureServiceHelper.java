@@ -14,6 +14,8 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 public class AzureServiceHelper {
+    private static final String TABLE_NAME = "speakers";
+
     private final Context mContext;
     private MobileServiceClient mClient;
     MobileServiceTable<Speaker> mSpeakerTable;
@@ -25,8 +27,8 @@ public class AzureServiceHelper {
         try {
             mClient = new MobileServiceClient(mContext.getString(R.string.appURL), mContext.getString(R.string.appKey), mContext);
             createLocalStore();
-            mSpeakerTable = mClient.getTable("speakers", Speaker.class);
-        } catch (MalformedURLException e) {
+            mSpeakerTable = mClient.getTable(TABLE_NAME, Speaker.class);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
