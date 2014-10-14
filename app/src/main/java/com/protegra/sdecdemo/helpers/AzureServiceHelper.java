@@ -62,9 +62,9 @@ public class AzureServiceHelper {
     }
 
     private void getSpeakers() {
-        new AsyncTask<String, Void, Integer>() {
+        new AsyncTask<Void, Void, Integer>() {
             @Override
-            protected Integer doInBackground(String... params) {
+            protected Integer doInBackground(Void... params) {
                 // Load Speakers from local SQLite database
                 Speakers.clear();
                 if (mDbHelper.getSpeakersCount() > 0) {
