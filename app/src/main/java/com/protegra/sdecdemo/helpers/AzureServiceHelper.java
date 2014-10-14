@@ -21,14 +21,18 @@ public class AzureServiceHelper {
 
     public AzureServiceHelper(Context context) {
         this.mContext = context;
-        this.mDbHelper = SQLiteHelper.getInstance(mContext);
 
         try {
             mClient = new MobileServiceClient(mContext.getString(R.string.appURL), mContext.getString(R.string.appKey), mContext);
+            createLocalStore();
             mSpeakerTable = mClient.getTable("speakers", Speaker.class);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void createLocalStore() {
+        mDbHelper = SQLiteHelper.getInstance(mContext);
     }
 
     public void loadData() {
@@ -43,8 +47,7 @@ public class AzureServiceHelper {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    SQLiteHelper db = SQLiteHelper.getInstance(mContext);
-                    db.removeAllSpeakers();
+                    mDbHelper.removeAllSpeakers();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -65,10 +68,9 @@ public class AzureServiceHelper {
             @Override
             protected Integer doInBackground(String... params) {
                 // Load Speakers from local SQLite database
-                SQLiteHelper db = SQLiteHelper.getInstance(mContext);
                 Speakers.clear();
-                if (db.getSpeakersCount() > 0) {
-                    for (Speaker item : db.getAllSpeakers()) {
+                if (mDbHelper.getSpeakersCount() > 0) {
+                    for (Speaker item : mDbHelper.getAllSpeakers()) {
                         Speakers.addItem(item);
                     }
                 }
@@ -113,8 +115,7 @@ public class AzureServiceHelper {
         new AsyncTask<Speaker, Void, String>() {
             @Override
             protected String doInBackground(Speaker... speakers) {
-                SQLiteHelper db = SQLiteHelper.getInstance(mContext);
-                db.bulkAddSpeakers(speakers);
+                mDbHelper.bulkAddSpeakers(speakers);
 
                 for (Speaker item : speakers) {
                     Speakers.addItem(item);
