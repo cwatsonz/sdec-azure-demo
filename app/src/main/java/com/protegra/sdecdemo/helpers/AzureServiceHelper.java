@@ -24,8 +24,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class AzureServiceHelper {
-    private static final String DATABASE_NAME = "sdec_demo";
-    private static final int DATABASE_VERSION = 1;
     private static final String TABLE_NAME = "speakers";
 
     private final Context mContext;
@@ -38,40 +36,13 @@ public class AzureServiceHelper {
 
         try {
             mClient = new MobileServiceClient(mContext.getString(R.string.appURL), mContext.getString(R.string.appKey), mContext);
-            createLocalStore();
+            SQLiteHelper.createLocalStore(mClient);
             mSpeakerTable = mClient.getSyncTable(TABLE_NAME, Speaker.class);
             mSpeakerQuery = mClient.getTable(Speaker.class).orderBy("name", QueryOrder.Ascending);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void createLocalStore() throws MobileServiceLocalStoreException, InterruptedException, ExecutionException {
-        SQLiteLocalStore localStore = new SQLiteLocalStore(mClient.getContext(), DATABASE_NAME, null, DATABASE_VERSION);
-        defineSpeakerTable(localStore);
-
-        SimpleSyncHandler handler = new SimpleSyncHandler();
-        MobileServiceSyncContext syncContext = mClient.getSyncContext();
-        syncContext.initialize(localStore, handler).get();
-    }
-
-    public void defineSpeakerTable(SQLiteLocalStore localStore) throws MobileServiceLocalStoreException {
-        Map<String, ColumnDataType> tableDefinition = new HashMap<String, ColumnDataType>();
-
-        tableDefinition.put("id", ColumnDataType.String);
-        tableDefinition.put("name", ColumnDataType.String);
-        tableDefinition.put("photo_small", ColumnDataType.String);
-        tableDefinition.put("photo_large", ColumnDataType.String);
-        tableDefinition.put("organization", ColumnDataType.String);
-        tableDefinition.put("role", ColumnDataType.String);
-        tableDefinition.put("twitter", ColumnDataType.String);
-        tableDefinition.put("website", ColumnDataType.String);
-        tableDefinition.put("description", ColumnDataType.String);
-        tableDefinition.put("__version", ColumnDataType.String);
-        tableDefinition.put("__deleted", ColumnDataType.Boolean);
-
-        localStore.defineTable(TABLE_NAME, tableDefinition);
     }
 
     public void loadData() {
