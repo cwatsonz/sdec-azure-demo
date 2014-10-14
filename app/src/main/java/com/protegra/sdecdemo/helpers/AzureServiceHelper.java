@@ -31,7 +31,6 @@ public class AzureServiceHelper {
     private final Context mContext;
     private MobileServiceClient mClient;
     private SpeakerHelper mSpeakerHelper;
-    private CountDownLatch latch;
 
     public AzureServiceHelper(Context mContext) {
         this.mContext = mContext;
@@ -49,20 +48,13 @@ public class AzureServiceHelper {
         SQLiteLocalStore localStore = new SQLiteLocalStore(mClient.getContext(), DATABASE_NAME, null, DATABASE_VERSION);
         SimpleSyncHandler handler = new SimpleSyncHandler();
         MobileServiceSyncContext syncContext = mClient.getSyncContext();
-
         mSpeakerHelper.defineTable(localStore);
-
         syncContext.initialize(localStore, handler).get();
     }
 
     public void loadData() {
-        Intent intent = new Intent("data-loading");
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-
-        latch = new CountDownLatch(1);
+        notifyDataLoading();
         mSpeakerHelper.pull();
-
-        waitForLoadComplete();
     }
 
     public void refreshData() {
@@ -70,26 +62,14 @@ public class AzureServiceHelper {
         loadData();
     }
 
-    private void waitForLoadComplete() {
+    private void notifyDataLoading() {
+        Intent intent = new Intent("data-loading");
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
 
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    latch.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                Intent intent = new Intent("data-loaded");
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-            }
-        }.execute();
+    private void notifyDataLoaded() {
+        Intent intent = new Intent("data-loaded");
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     class SpeakerHelper {
@@ -147,7 +127,7 @@ public class AzureServiceHelper {
                         e.printStackTrace();
                     }
 
-                    latch.countDown();
+                    notifyDataLoaded();
                     return null;
                 }
             }.execute();
