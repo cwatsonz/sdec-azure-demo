@@ -12,15 +12,16 @@ import com.protegra.sdecdemo.data.Speakers;
 
 import java.net.MalformedURLException;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 public class AzureServiceHelper {
     private final Context mContext;
     private MobileServiceClient mClient;
     MobileServiceTable<Speaker> mSpeakerTable;
+    SQLiteHelper mDbHelper;
 
-    public AzureServiceHelper(Context mContext) {
-        this.mContext = mContext;
+    public AzureServiceHelper(Context context) {
+        this.mContext = context;
+        this.mDbHelper = SQLiteHelper.getInstance(mContext);
 
         try {
             mClient = new MobileServiceClient(mContext.getString(R.string.appURL), mContext.getString(R.string.appKey), mContext);
@@ -32,18 +33,19 @@ public class AzureServiceHelper {
 
     public void loadData() {
         notifyDataLoading();
-
         getSpeakers();
     }
 
     public void refreshData() {
+        Speakers.clear();
+
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
                     SQLiteHelper db = SQLiteHelper.getInstance(mContext);
                     db.removeAllSpeakers();
-                    Speakers.clear();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
