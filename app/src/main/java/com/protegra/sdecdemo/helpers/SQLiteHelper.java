@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class SQLiteHelper {
-    private static final String DATABASE_NAME = "sdec_demo";
+    private static final String DATABASE_NAME = "sdec_demo_sync";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_SPEAKERS  = "speakers";
 
