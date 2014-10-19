@@ -15,37 +15,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.protegra.sdecdemo.data.Speaker;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
-
     private static SQLiteHelper sInstance;
     private SQLiteDatabase mDatabase;
     private final AtomicInteger mOpenCounter = new AtomicInteger();
 
-    private static final int DATABASE_VERSION = 1;
-
     private static final String DATABASE_NAME = "sdec_demo";
-
+    private static final int DATABASE_VERSION = 2;
     private static final String TABLE_SPEAKERS = "speakers";
 
     private static final String SPEAKERS_KEY_ID = "_id";
     private static final String SPEAKERS_KEY_NAME = "name";
     private static final String SPEAKERS_KEY_PHOTO_SMALL = "photo_small";
-    private static final String SPEAKERS_KEY_PHOTO_LARGE = "photo_large";
-    private static final String SPEAKERS_KEY_ORGANIZATION = "organization";
-    private static final String SPEAKERS_KEY_ROLE = "role";
-    private static final String SPEAKERS_KEY_TWITTER = "twitter";
-    private static final String SPEAKERS_KEY_WEBSITE = "website";
-    private static final String SPEAKERS_KEY_DESCRIPTION = "description";
 
     private static final String CREATE_SPEAKERS_TABLE = "CREATE TABLE " + TABLE_SPEAKERS + "("
             + SPEAKERS_KEY_ID + " TEXT PRIMARY KEY,"
             + SPEAKERS_KEY_NAME + " TEXT,"
             + SPEAKERS_KEY_PHOTO_SMALL + " TEXT,"
-            + SPEAKERS_KEY_PHOTO_LARGE + " TEXT,"
-            + SPEAKERS_KEY_ORGANIZATION + " TEXT,"
-            + SPEAKERS_KEY_ROLE + " TEXT,"
-            + SPEAKERS_KEY_TWITTER + " TEXT,"
-            + SPEAKERS_KEY_WEBSITE + " TEXT,"
-            + SPEAKERS_KEY_DESCRIPTION + " TEXT"
             + ")";
 
     public static synchronized SQLiteHelper getInstance(Context context) {
@@ -107,12 +92,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             values.put(SPEAKERS_KEY_ID, speaker.id);
             values.put(SPEAKERS_KEY_NAME, speaker.name);
             values.put(SPEAKERS_KEY_PHOTO_SMALL, speaker.photo_small);
-            values.put(SPEAKERS_KEY_PHOTO_LARGE, speaker.photo_large);
-            values.put(SPEAKERS_KEY_ORGANIZATION, speaker.organization);
-            values.put(SPEAKERS_KEY_ROLE, speaker.role);
-            values.put(SPEAKERS_KEY_TWITTER, speaker.twitter);
-            values.put(SPEAKERS_KEY_WEBSITE, speaker.website);
-            values.put(SPEAKERS_KEY_DESCRIPTION, speaker.description);
 
             db.insertOrThrow(TABLE_SPEAKERS, null, values);
         } catch (Exception e) {
@@ -130,15 +109,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     + "("
                     + SPEAKERS_KEY_ID + ", "
                     + SPEAKERS_KEY_NAME + ", "
-                    + SPEAKERS_KEY_PHOTO_SMALL + ", "
-                    + SPEAKERS_KEY_PHOTO_LARGE + ", "
-                    + SPEAKERS_KEY_ORGANIZATION + ", "
-                    + SPEAKERS_KEY_ROLE + ", "
-                    + SPEAKERS_KEY_TWITTER + ", "
-                    + SPEAKERS_KEY_WEBSITE + ", "
-                    + SPEAKERS_KEY_DESCRIPTION
+                    + SPEAKERS_KEY_PHOTO_SMALL
                     + ")"
-                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + " VALUES (?, ?, ?)";
             SQLiteStatement statement = db.compileStatement(sql);
 
             db.beginTransaction();
@@ -148,12 +121,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 statement.bindString(1, speaker.id);
                 statement.bindString(2, speaker.name);
                 statement.bindString(3, speaker.photo_small != null ? speaker.photo_small : "");
-                statement.bindString(4, speaker.photo_large != null ? speaker.photo_large : "");
-                statement.bindString(5, speaker.organization != null ? speaker.organization : "");
-                statement.bindString(6, speaker.role != null ? speaker.role : "");
-                statement.bindString(7, speaker.twitter != null ? speaker.twitter : "");
-                statement.bindString(8, speaker.website != null ? speaker.website : "");
-                statement.bindString(9, speaker.description != null ? speaker.description : "");
                 statement.execute();
             }
 
@@ -175,12 +142,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                             SPEAKERS_KEY_ID,
                             SPEAKERS_KEY_NAME,
                             SPEAKERS_KEY_PHOTO_SMALL,
-                            SPEAKERS_KEY_PHOTO_LARGE,
-                            SPEAKERS_KEY_ORGANIZATION,
-                            SPEAKERS_KEY_ROLE,
-                            SPEAKERS_KEY_TWITTER,
-                            SPEAKERS_KEY_WEBSITE,
-                            SPEAKERS_KEY_DESCRIPTION
                     }, SPEAKERS_KEY_ID + "=?",
                     new String[]{id}, null, null, null, null);
 
@@ -206,12 +167,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 speaker.id = cursor.getString(cursor.getColumnIndexOrThrow(SPEAKERS_KEY_ID));
                 speaker.name = cursor.getString(cursor.getColumnIndexOrThrow(SPEAKERS_KEY_NAME));
                 speaker.photo_small = cursor.getString(cursor.getColumnIndexOrThrow(SPEAKERS_KEY_PHOTO_SMALL));
-                speaker.photo_large = cursor.getString(cursor.getColumnIndexOrThrow(SPEAKERS_KEY_PHOTO_LARGE));
-                speaker.organization = cursor.getString(cursor.getColumnIndexOrThrow(SPEAKERS_KEY_ORGANIZATION));
-                speaker.role = cursor.getString(cursor.getColumnIndexOrThrow(SPEAKERS_KEY_ROLE));
-                speaker.twitter = cursor.getString(cursor.getColumnIndexOrThrow(SPEAKERS_KEY_TWITTER));
-                speaker.website = cursor.getString(cursor.getColumnIndexOrThrow(SPEAKERS_KEY_WEBSITE));
-                speaker.description = cursor.getString(cursor.getColumnIndexOrThrow(SPEAKERS_KEY_DESCRIPTION));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -251,12 +206,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(SPEAKERS_KEY_NAME, speaker.name);
             values.put(SPEAKERS_KEY_PHOTO_SMALL, speaker.photo_small);
-            values.put(SPEAKERS_KEY_PHOTO_LARGE, speaker.photo_large);
-            values.put(SPEAKERS_KEY_ORGANIZATION, speaker.organization);
-            values.put(SPEAKERS_KEY_ROLE, speaker.role);
-            values.put(SPEAKERS_KEY_TWITTER, speaker.twitter);
-            values.put(SPEAKERS_KEY_WEBSITE, speaker.website);
-            values.put(SPEAKERS_KEY_DESCRIPTION, speaker.description);
 
             result = db.update(TABLE_SPEAKERS, values, SPEAKERS_KEY_ID + " = ?",
                     new String[]{String.valueOf(speaker.id)});

@@ -14,20 +14,18 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 public class AzureServiceHelper {
-    private static final String TABLE_NAME = "speakers";
-
     private final Context mContext;
     private MobileServiceClient mClient;
-    MobileServiceTable<Speaker> mSpeakerTable;
-    SQLiteHelper mDbHelper;
+    protected MobileServiceTable<Speaker> mSpeakerTable;
+    protected SQLiteHelper mDbHelper;
 
     public AzureServiceHelper(Context context) {
         this.mContext = context;
 
         try {
-            mClient = new MobileServiceClient(mContext.getString(R.string.appURL), mContext.getString(R.string.appKey), mContext);
+            mClient = new MobileServiceClient("https://sdec-demo.azure-mobile.net/", "LZXsvLGVfDqhVSmZVwvietQZhGDwhY56", mContext);
             mDbHelper = SQLiteHelper.getInstance(mContext);
-            mSpeakerTable = mClient.getTable(TABLE_NAME, Speaker.class);
+            mSpeakerTable = mClient.getTable("speakers", Speaker.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
