@@ -24,8 +24,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class AzureServiceHelper {
-    private static final String TABLE_NAME = "speakers";
-
     private final Context mContext;
     private MobileServiceClient mClient;
     protected MobileServiceSyncTable<Speaker> mSpeakerTable;
@@ -35,9 +33,9 @@ public class AzureServiceHelper {
         this.mContext = mContext;
 
         try {
-            mClient = new MobileServiceClient(mContext.getString(R.string.appURL), mContext.getString(R.string.appKey), mContext);
+            mClient = new MobileServiceClient("https://sdec-demo.azure-mobile.net/", "LZXsvLGVfDqhVSmZVwvietQZhGDwhY56", mContext);
             SQLiteHelper.createLocalStore(mClient);
-            mSpeakerTable = mClient.getSyncTable(TABLE_NAME, Speaker.class);
+            mSpeakerTable = mClient.getSyncTable("speakers", Speaker.class);
             mSpeakerQuery = mClient.getTable(Speaker.class).orderBy("name", QueryOrder.Ascending);
 
         } catch (Exception e) {

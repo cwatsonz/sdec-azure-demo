@@ -19,12 +19,6 @@ public class SQLiteHelper {
     private static final String SPEAKERS_KEY_ID = "_id";
     private static final String SPEAKERS_KEY_NAME = "name";
     private static final String SPEAKERS_KEY_PHOTO_SMALL = "photo_small";
-    private static final String SPEAKERS_KEY_PHOTO_LARGE = "photo_large";
-    private static final String SPEAKERS_KEY_ORGANIZATION = "organization";
-    private static final String SPEAKERS_KEY_ROLE = "role";
-    private static final String SPEAKERS_KEY_TWITTER = "twitter";
-    private static final String SPEAKERS_KEY_WEBSITE = "website";
-    private static final String SPEAKERS_KEY_DESCRIPTION = "description";
     private static final String SPEAKERS_KEY_VERSION = "__version";
     private static final String SPEAKERS_KEY_DELETED = "__deleted";
 
@@ -43,12 +37,6 @@ public class SQLiteHelper {
         tableDefinition.put(SPEAKERS_KEY_ID, ColumnDataType.String);
         tableDefinition.put(SPEAKERS_KEY_NAME, ColumnDataType.String);
         tableDefinition.put(SPEAKERS_KEY_PHOTO_SMALL, ColumnDataType.String);
-        tableDefinition.put(SPEAKERS_KEY_PHOTO_LARGE, ColumnDataType.String);
-        tableDefinition.put(SPEAKERS_KEY_ORGANIZATION, ColumnDataType.String);
-        tableDefinition.put(SPEAKERS_KEY_ROLE, ColumnDataType.String);
-        tableDefinition.put(SPEAKERS_KEY_TWITTER, ColumnDataType.String);
-        tableDefinition.put(SPEAKERS_KEY_WEBSITE, ColumnDataType.String);
-        tableDefinition.put(SPEAKERS_KEY_DESCRIPTION, ColumnDataType.String);
         tableDefinition.put(SPEAKERS_KEY_VERSION, ColumnDataType.String);
         tableDefinition.put(SPEAKERS_KEY_DELETED, ColumnDataType.Boolean);
 
